@@ -31,6 +31,7 @@ library Math {
 }
 
 // File: @openzeppelin/contracts/math/SafeMath.sol
+
 /**
  * @dev Wrappers over Solidity's arithmetic operations with added overflow
  * checks.
@@ -434,6 +435,7 @@ library Address {
 }
 
 // File: @openzeppelin/contracts/token/ERC20/SafeERC20.sol
+
 /**
  * @title SafeERC20
  * @dev Wrappers around ERC20 operations that throw on failure (when the token
@@ -507,7 +509,6 @@ library SafeERC20 {
 /**
  * Reward Amount Interface
  */
-
 contract IRewardDistributionRecipient is Ownable {
     address rewardDistribution;
 
@@ -533,7 +534,8 @@ contract HDTTokenWrapper {
     using SafeMath for uint256;
     using SafeERC20 for IERC20;
 
-    IERC20 public stakeToken = IERC20(0xB8c77482e45F1F44dE1745F52C74426C631bDD52); 
+    //GXC
+    IERC20 public stakeToken = IERC20(0x2e93FE8d550a7B7E7b2e561cd45ceBccbAa79358); 
 
     uint256 private _totalSupply;
     mapping(address => uint256) private _balances;
@@ -560,9 +562,9 @@ contract HDTTokenWrapper {
 }
 
 /**
- * HDT-BNB Pool
+ * HDT-GXC Pool
  */
-contract HDTBNBPool is HDTTokenWrapper, IRewardDistributionRecipient {
+contract HDTGXCPool is HDTTokenWrapper, IRewardDistributionRecipient {
     IERC20 public hdt = IERC20(0x1A754244EC6C879C38dD4a774e3979d77D414Bc1);
     uint256 public constant DURATION = 7 days;
 
@@ -621,13 +623,13 @@ contract HDTBNBPool is HDTTokenWrapper, IRewardDistributionRecipient {
     }
 
     function stake(uint256 amount) public checkOpen checkStart updateReward(msg.sender){ 
-        require(amount > 0, "HDT-BNB-POOL: Cannot stake 0");
+        require(amount > 0, "HDT-GXC-POOL: Cannot stake 0");
         super.stake(amount);
         emit Staked(msg.sender, amount);
     }
 
     function withdraw(uint256 amount) public checkStart updateReward(msg.sender){
-        require(amount > 0, "HDT-BNB-POOL: Cannot withdraw 0");
+        require(amount > 0, "HDT-GXC-POOL: Cannot withdraw 0");
         super.withdraw(amount);
         emit Withdrawn(msg.sender, amount);
     }
@@ -647,12 +649,12 @@ contract HDTBNBPool is HDTTokenWrapper, IRewardDistributionRecipient {
     }
 
     modifier checkStart(){
-        require(block.timestamp > startTime,"HDT-BNB-POOL: Not start");
+        require(block.timestamp > startTime,"HDT-GXC-POOL: Not start");
         _;
     }
 
     modifier checkOpen() {
-        require(open, "HDT-BNB-POOL: Pool is closed");
+        require(open, "HDT-GXC-POOL: Pool is closed");
         _;
     }
 

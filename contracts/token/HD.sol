@@ -224,9 +224,9 @@ library SafeERC20 {
 }
 
 /**
- * HDT Token
+ * HD Token
  */
-contract HDT is ERC20, ERC20Detailed {
+contract HD is ERC20, ERC20Detailed {
     using SafeERC20 for IERC20;
     using Address for address;
     using SafeMath for uint;
@@ -246,7 +246,7 @@ contract HDT is ERC20, ERC20Detailed {
         _;
     }
 
-    constructor () public ERC20Detailed("HUB.finance", "HDT", 18, 800000000 * 10 ** 18) {
+    constructor () public ERC20Detailed("HUB.finance", "HD", 18, 21000000 * 10 ** 18) {
         governance = tx.origin;
     }
 

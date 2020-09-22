@@ -1,7 +1,6 @@
-
 // File: @openzeppelin/contracts/math/Math.sol
 
-pragma solidity ^0.5.16;
+pragma solidity 0.5.16;
 
 /**
  * @dev Standard math utilities missing in the Solidity language.
@@ -32,9 +31,6 @@ library Math {
 }
 
 // File: @openzeppelin/contracts/math/SafeMath.sol
-
-pragma solidity ^0.5.16;
-
 /**
  * @dev Wrappers over Solidity's arithmetic operations with added overflow
  * checks.
@@ -191,9 +187,6 @@ library SafeMath {
 }
 
 // File: @openzeppelin/contracts/GSN/Context.sol
-
-pragma solidity ^0.5.16;
-
 /*
  * @dev Provides information about the current execution context, including the
  * sender of the transaction and its data. While these are generally available
@@ -221,9 +214,6 @@ contract Context {
 }
 
 // File: @openzeppelin/contracts/ownership/Ownable.sol
-
-pragma solidity ^0.5.16;
-
 /**
  * @dev Contract module which provides a basic access control mechanism, where
  * there is an account (an owner) that can be granted exclusive access to
@@ -299,9 +289,6 @@ contract Ownable is Context {
 }
 
 // File: @openzeppelin/contracts/token/ERC20/IERC20.sol
-
-pragma solidity ^0.5.16;
-
 /**
  * @dev Interface of the ERC20 standard as defined in the EIP. Does not include
  * the optional functions; to access them see {ERC20Detailed}.
@@ -379,9 +366,6 @@ interface IERC20 {
 }
 
 // File: @openzeppelin/contracts/utils/Address.sol
-
-pragma solidity ^0.5.16;
-
 /**
  * @dev Collection of functions related to the address type
  */
@@ -450,9 +434,6 @@ library Address {
 }
 
 // File: @openzeppelin/contracts/token/ERC20/SafeERC20.sol
-
-pragma solidity ^0.5.16;
-
 /**
  * @title SafeERC20
  * @dev Wrappers around ERC20 operations that throw on failure (when the token
@@ -526,8 +507,6 @@ library SafeERC20 {
 /**
  * Reward Amount Interface
  */
-pragma solidity ^0.5.16;
-
 contract IRewardDistributionRecipient is Ownable {
     address rewardDistribution;
 
@@ -549,13 +528,12 @@ contract IRewardDistributionRecipient is Ownable {
 /**
  * Staking Token Wrapper
  */
-pragma solidity ^0.5.16;
-
 contract HDTTokenWrapper {
     using SafeMath for uint256;
     using SafeERC20 for IERC20;
 
-    IERC20 public stakeToken = IERC20(0x2382d13D3cB0859DcF19A67fd5155DF55b67b2B3); 
+    //USDT
+    IERC20 public stakeToken = IERC20(0xdac17f958d2ee523a2206206994597c13d831ec7); 
 
     uint256 private _totalSupply;
     mapping(address => uint256) private _balances;
@@ -584,13 +562,11 @@ contract HDTTokenWrapper {
 /**
  * HDT-USDT Pool
  */
-pragma solidity ^0.5.0;
-
 contract HDTUSDTPool is HDTTokenWrapper, IRewardDistributionRecipient {
     IERC20 public hdt = IERC20(0x1A754244EC6C879C38dD4a774e3979d77D414Bc1);
     uint256 public constant DURATION = 7 days;
 
-    uint256 public startTime = 1598534100; //utc+8 2020 07-28 0:00:00
+    uint256 public constant startTime = 1598534100; //utc+8 2020 07-28 0:00:00
     uint256 public periodFinish = 0;
     uint256 public rewardRate = 0;
     uint256 public lastUpdateTime;
@@ -644,13 +620,13 @@ contract HDTUSDTPool is HDTTokenWrapper, IRewardDistributionRecipient {
                 .add(rewards[account]);
     }
 
-    function stake(uint256 amount) public checkOpen updateReward(msg.sender) checkStart{ 
+    function stake(uint256 amount) public checkOpen checkStart updateReward(msg.sender){ 
         require(amount > 0, "HDT-USDT-POOL: Cannot stake 0");
         super.stake(amount);
         emit Staked(msg.sender, amount);
     }
 
-    function withdraw(uint256 amount) public updateReward(msg.sender) checkStart{
+    function withdraw(uint256 amount) public checkStart updateReward(msg.sender){
         require(amount > 0, "HDT-USDT-POOL: Cannot withdraw 0");
         super.withdraw(amount);
         emit Withdrawn(msg.sender, amount);
@@ -661,7 +637,7 @@ contract HDTUSDTPool is HDTTokenWrapper, IRewardDistributionRecipient {
         getReward();
     }
 
-    function getReward() public updateReward(msg.sender) checkStart{
+    function getReward() public checkStart updateReward(msg.sender){
         uint256 reward = earned(msg.sender);
         if (reward > 0) {
             rewards[msg.sender] = 0;
